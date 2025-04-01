@@ -80,43 +80,22 @@ do i_step=traj%step+1,ctrl%nsteps
    write(*,*)"Zhou,i_step=",i_step
    call write_logtimestep(u_log,i_step)
 
-  !...Calculate Force of previous position with half-step mapping variables
    call calc_force(traj,ctrl)
 
-   !...Verlet step for nuclear positions
    call VelocityVerlet_xstep(traj,ctrl) 
 
-   !...Do QM calculation to get
-   !...H_MCH_ss and grad_MCH_sad
-   !...In sharc, grad_MCH_sad is transformed into Gmatrix_ss and then Gmatrix_ssad
-   !call do_qm_calculations(traj,ctrl)
-   !Construct Gmatrix: diagonal gradients + non-adiabatic coupling
    call do_qm_calc_qd(traj,ctrl)
 
-   call calc_solve_polariton_Hamiltonian(traj,ctrl)
+   call propagate_mapping(traj,ctrl)
 
-  !...Verlet for nuclear velocity
-  !call VelocityVerlet_vstep(traj,ctrl)
-   call VelocityVerlet_vstep_Half(traj,ctrl)
+   !...Transforming mapping variables into t2 basis
+   call transform_mapping(traj,ctrl)
 
-   !...begin substep for mapping variable
-   !...Calcualate the HQD(t) throught interpelation
-   !...Propagate the forward and backward mapping variables by solving Hamilton's
-   !...equation with Hamiltonian hmF and hmB
-
-   !...Calculate Force of new position with half-step mapping with new position
    call calc_force(traj,ctrl)
 
-   !...Verlet for nuclear velocity
-   !call VelocityVerlet_vstep(traj,ctrl)
-   call VelocityVerlet_vstep_Half(traj,ctrl)
+   call VelocityVerlet_vstep(traj,ctrl)
 
-   if(ctrl%integrator==1)then
-    call propagate_mapping(traj,ctrl)
-  endif
-
-  !...Transforming mapping variables into t2 QD basis
-  call transform_mapping(traj,ctrl)
+   call Calculate_etot(traj,ctrl)
 
    !...Save variables
    call save_old(traj)

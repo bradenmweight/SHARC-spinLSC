@@ -1,0 +1,11 @@
+***,$NAME freqency calculation
+memory,1000,m
+
+file,2,$NAME.wf,new;
+
+basis=6-31++G**
+gthresh,energy=1.d-8
+
+geomtyp=xyz
+symmetry,nosym
+geometry={

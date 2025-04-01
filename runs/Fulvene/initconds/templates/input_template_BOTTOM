@@ -1,0 +1,15 @@
+}
+
+hf;accu,14
+optg;coord,3n;
+
+{frequencies,analytic
+thermo,sym=auto
+print,thermo}
+
+mp2 ! {dfunc,pbe}
+optg;coord,3n
+{frequencies
+thermo,
+print,thermo}
+put,molden,$NAME.molden;

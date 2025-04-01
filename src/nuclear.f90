@@ -97,12 +97,12 @@ subroutine VelocityVerlet_vstep(traj,ctrl)
 
   do iatom=1,ctrl%natom
     do idir=1,3
-      
-      traj%accel_ad(iatom,idir)=0.5d0*( traj%accel_ad(iatom,idir) - traj%grad_ad(iatom,idir)/traj%mass_a(iatom) )
+      traj%accel_ad(iatom,idir)=0.5d0*(traj%accel_ad(iatom,idir)&
+      &-traj%grad_ad(iatom,idir)/traj%mass_a(iatom))
 
-      !traj%accel_ad(iatom,idir) =  -traj%grad_ad(iatom,idir)/traj%mass_a(iatom)
-
-      traj%veloc_ad(iatom,idir) = traj%veloc_ad(iatom,idir) + traj%accel_ad(iatom,idir)*ctrl%dtstep
+      traj%veloc_ad(iatom,idir)=&
+      & traj%veloc_ad(iatom,idir)&
+      &+traj%accel_ad(iatom,idir)*ctrl%dtstep
     enddo
   enddo
 

@@ -3,7 +3,7 @@
 !...
 !...initialize mapping variables
 !...nstates=# of states
-subroutine init_map(nstates, initState) ! This is true initial state, not focused foward backward. Only use for density matrix.
+subroutine init_map(nstates, initState) ! This is initial state
 use definitions
 use misc
 implicit none
@@ -55,7 +55,7 @@ do i=1,nstates
    r(i) = sqrt( gw )
 enddo
 
-! Radii for initial forward and backward states are slightly bigger
+! Radii for initial state is slightly bigger
 r(initState) = sqrt( 2 + gw )
 
 ! Calculate initial mapping variables
@@ -65,16 +65,20 @@ do i=1,nstates
 enddo
 
 ! We will need to keep track of initial state for density matrix
-! zF0,zB0 are global
+! zF0 is global
 do i=1,nstates
    z0(i) = z(i)
    write(*,*)"Z(i), i:",z(i)
 enddo
 
-! Check initial density matrix. We need true initial state now
+! Check initial density matrix.
 do i=1,nstates
    do j=1,nstates
-      Dmatrix(i,j) = 0.5d0 * ( conjg(z(i)) * z(j) - gw  )
+      if ( i .eq. j ) then
+         Dmatrix(i,j) = 0.5d0 * ( conjg(z(i)) * z(j) - gw  )
+      else
+         Dmatrix(i,j) = 0.5d0 * ( conjg(z(i)) * z(j)  )
+      endif
    enddo
 enddo
 
@@ -140,10 +144,10 @@ subroutine propagate_mapping(traj,ctrl)
    do i=1,ctrl%nsubsteps
       
       !interpolate Hamiltonian at t in [t1,t2]
-      Hnow=Hold+Hdiff*dble(i)/dble(ctrl%nsubsteps)     ! This removes interpolation
+      Hnow=Hold+Hdiff*dble(i)/dble(ctrl%nsubsteps)
 
       zimag = zimag - 0.5 * matmul( Hnow, zreal ) * dt
-      zreal = zreal + 1.0 * matmul( Hnow, zimag ) * dt
+      zreal = zreal + matmul( Hnow, zimag ) * dt
       zimag = zimag - 0.5 * matmul( Hnow, zreal ) * dt
    
    enddo

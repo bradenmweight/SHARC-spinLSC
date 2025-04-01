@@ -1,0 +1,14 @@
+
+basis 6-31G*
+dkho 0
+
+gradaccudefault 1e-7
+gradaccumax 1e-5
+
+closed 28 # 2N = 2*2 = 4, 12C = 12 * 2 = 24, 10H = 0
+occ 52   # 12C = 3*12 = 36, 2N = 2*3 = 6, 10H = 10*1
+nelec 96
+roots 2 0 0
+rootpad 0 0 0
+
+

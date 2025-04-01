@@ -252,7 +252,7 @@ do iatom=1,ctrl%natom
               &-(traj%H_MCH_ss(istate,istate)-traj%H_MCH_ss(jstate,jstate))&
               &*traj%NACdr_ssad(istate,jstate,iatom,idir)
               Gmatrix_ss(jstate,istate)=Gmatrix_ss(istate,jstate)
-            enddo
+         enddo
       enddo
 
       if(printlevel>4) then
@@ -293,14 +293,6 @@ integer::iatom,idir,istate,jstate
 real*8::dentemp !temporary variable
 
 traj%grad_ad=0.d0
-
-#ifdef Model
-traj%grad_ad=traj%grad_ad+traj%Gmatrix0*dble(ctrl%trace)
-#else
-do iatom=1,ctrl%natom   !add state-independent part
-   traj%grad_ad(iatom,:)=traj%grad_ad(iatom,:)+traj%G0(iatom,:)*dble(ctrl%trace)
-enddo
-#endif
 
 do istate=1,ctrl%nstates
    do jstate=1,ctrl%nstates
@@ -374,7 +366,7 @@ Hel = traj%H_MCH_ss ! Current energies
 do istate=1,ctrl%nstates
    do jstate=1,ctrl%nstates
       if ( istate .eq. jstate ) then
-         Dmatrix(istate,jstate) = 0.5d0*( conjg( z(istate) ) * z(jstate)  - gw )
+         Dmatrix(istate,jstate) = 0.5d0 * ( conjg( z(istate) ) * z(jstate) - gw )
       else
          Dmatrix(istate,jstate) = 0.5d0*( conjg( z(istate) ) * z(jstate) )
       endif

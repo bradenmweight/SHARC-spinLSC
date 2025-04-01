@@ -1,0 +1,8 @@
+molpro $MOLPRO/
+scratchdir /scratch/bweight/qd-pldm/runs/Fulvene/temp
+savedir /scratch/bweight/qd-pldm/runs/Fulvene/restart
+gradaccudefault 0.00000010
+gradaccumax 0.000100
+memory 20000
+ncpu 1
+wfoverlap $SHARC/wfoverlap.x
